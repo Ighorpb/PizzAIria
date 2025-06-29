@@ -53,8 +53,4 @@ OPENAI_API_KEY=sua-chave-da-openai
 # 🌐 URL do banco de dados (se estiver utilizando Prisma)
 DATABASE_URL=postgres://usuario:senha@host:porta/nome_do_banco
 
-## 👨‍🍳 Desenvolvedor
-
-Feito por Ighor.
-
 ```
