@@ -27,7 +27,7 @@ PizzAIria é um aplicativo de atendimento virtual que simula um chat inteligente
 - [TypeScript](https://www.typescriptlang.org/)
 - [TailwindCSS](https://tailwindcss.com/)
 - [OpenAI API](https://platform.openai.com/)
-- [Zippopotam.us API](https://api.zippopotam.us/) (CEP)
+- [ViaCEP](https://viacep.com.br/) (consultas de CEP no Brasil)
 - [Prisma](https://www.prisma.io/) (opcional)
 
 ---
