@@ -1,38 +1,41 @@
 # 🍕 PizzAIria - Atendente Virtual de Pizzaria
 
-PizzAIria é um aplicativo de atendimento virtual que simula um chat inteligente para pedidos de pizza, bebidas e sobremesas. Desenvolvido com Next.js, TypeScript e OpenAI, ele oferece uma experiência moderna, interativa e automatizada.
+PizzAIria é um aplicativo de chat inteligente que simula um atendente virtual para pedidos de pizzas, bebidas e sobremesas — desenvolvido com ❤️ usando **Next.js**, **TypeScript**, **OpenAI** e muito mais.
 
 ---
 
 ## 📸 Demonstração
 
-![Chat Preview](./public/preview.png) <!-- Substitua com seu caminho correto -->
+![Chat Preview](./public/preview.png) <!-- Substitua pelo caminho correto -->
 
 ---
 
-## 🚀 Funcionalidades
+## ⚙️ Funcionalidades
 
-- Chat interativo para pedidos
-- Suporte a bebidas (lata, 600ml, 2L), sobremesas e pizzas
-- Fluxo inteligente com perguntas automáticas
-- Verificação de endereço via CEP (complemento, rua, quadra, lote)
-- Interface responsiva e moderna
-
----
-
-## 🛠️ Tecnologias
-
-- [Next.js](https://nextjs.org/)
-- [React](https://react.dev/)
-- [TypeScript](https://www.typescriptlang.org/)
-- [TailwindCSS](https://tailwindcss.com/)
-- [OpenAI API](https://platform.openai.com/)
-- [ViaCEP](https://viacep.com.br/) (consultas de CEP no Brasil)
-- [Prisma](https://www.prisma.io/) (opcional)
+- 🧠 Fluxo inteligente de pedidos com IA
+- 🍕 Escolha pizzas (meio a meio, média ou grande)
+- 🥤 Bebidas: Lata, 600ml ou 2L (ex: Coca, Guaraná)
+- 🍮 Sobremesas: Pudim, Mousse, Sorvete
+- 🏠 Busca automática de endereço via CEP
+- 📱 Interface moderna e responsiva
+- 🧾 Resumo do pedido com endereço e forma de pagamento
 
 ---
 
-## 📦 Como executar
+## 🛠️ Tecnologias Utilizadas
+
+- ⚛️ [Next.js](https://nextjs.org/)
+- 👨‍💻 [React](https://reactjs.org/)
+- 🔠 [TypeScript](https://www.typescriptlang.org/)
+- 🎨 [TailwindCSS](https://tailwindcss.com/)
+- 🧠 [OpenAI API](https://platform.openai.com/)
+- 🌎 [ViaCEP](https://viacep.com.br/)
+- 🧬 [Prisma ORM](https://prisma.io/) (opcional)
+- 🧪 [Jest](https://jestjs.io/) + [ts-jest](https://kulshekhar.github.io/ts-jest/) para testes unitários
+
+---
+
+## 📦 Como Rodar o Projeto
 
 ```bash
 # Instalar dependências
@@ -42,15 +45,78 @@ npm install
 npm run dev
 ```
 
-## 🧪 Variáveis de ambiente
+---
 
-Para o projeto funcionar corretamente, você precisa criar um arquivo `.env` na raiz do projeto com as seguintes variáveis:
+## 🔐 Variáveis de Ambiente
+
+Crie um arquivo `.env` na raiz do projeto com:
 
 ```env
-# 🔐 Chave da API OpenAI
-OPENAI_API_KEY=sua-chave-da-openai
+# Chave da API da OpenAI
+OPENAI_API_KEY=sua_chave_openai_aqui
 
-# 🌐 URL do banco de dados (se estiver utilizando Prisma)
-DATABASE_URL=postgres://usuario:senha@host:porta/nome_do_banco
+# Opcional: URL do banco de dados (Prisma)
+DATABASE_URL=postgres://usuario:senha@host:porta/banco
+```
+
+---
+
+## 🧪 Executando os Testes
+
+Usamos **Jest** para testes unitários:
+
+```bash
+# Rodar todos os testes
+npm test
+```
+
+Estrutura de testes:
 
 ```
+test/
+├── cep.service.test.ts
+└── message.service.test.ts
+```
+
+---
+
+## 📚 Estrutura do Projeto
+
+```
+├── prisma/
+│   └── schema.prisma
+├── src/
+│   ├── app/
+│   │   └── api/
+│   ├── controllers/
+│   ├── services/
+│   └── types/
+├── test/
+│   ├── cep.service.test.ts
+│   └── message.service.test.ts
+├── public/
+│   └── preview.png
+├── jest.config.js
+└── README.md
+```
+
+---
+
+## 💡 Ideias Futuras
+
+- [ ] Suporte a WebSocket para digitação em tempo real
+- [ ] Deploy com Docker ou Vercel
+- [ ] Integração contínua com GitHub Actions
+- [ ] Testes de ponta a ponta com Cypress ou Playwright
+
+---
+
+## 📣 Autor
+
+Feito com 🍕, ☕ e OpenAI por \[Seu Nome Aqui].
+
+---
+
+## 📝 Licença
+
+Licença MIT — Sinta-se livre para usar, modificar e compartilhar!
