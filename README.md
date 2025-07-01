@@ -100,20 +100,9 @@ test/
 └── README.md
 ```
 
----
-
-## 💡 Ideias Futuras
-
-- [ ] Suporte a WebSocket para digitação em tempo real
-- [ ] Deploy com Docker ou Vercel
-- [ ] Integração contínua com GitHub Actions
-- [ ] Testes de ponta a ponta com Cypress ou Playwright
-
----
-
 ## 📣 Autor
 
-Feito com 🍕, ☕ e OpenAI por \[Seu Nome Aqui].
+Feito com 🍕, ☕ e OpenAI por \Ighor.
 
 ---
 
