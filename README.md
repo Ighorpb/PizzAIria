@@ -102,7 +102,7 @@ test/
 
 ## 📣 Autor
 
-Feito com 🍕, ☕ e OpenAI por \Ighor.
+Feito com 🍕, ☕ e OpenAI por Ighor.
 
 ---
 
