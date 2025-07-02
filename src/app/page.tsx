@@ -1,11 +1,10 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-
-type Message = { from: "user" | "bot"; text: string };
+import { ChatMessage } from "@/types/message";
 
 export default function Home() {
-  const [messages, setMessages] = useState<Message[]>([
+  const [messages, setMessages] = useState<ChatMessage[]>([
     {
       from: "bot",
       text: "Olá! Bem-vindo à Pizzaria Virtual 🍕. Como posso te ajudar hoje?",
@@ -13,6 +12,9 @@ export default function Home() {
   ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showHistory, setShowHistory] = useState(false);
+  const [history, setHistory] = useState<ChatMessage[]>([]);
+
   const chatRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -24,24 +26,35 @@ export default function Home() {
   }, [messages]);
 
   useEffect(() => {
-    if (!loading) {
-      inputRef.current?.focus();
-    }
+    if (!loading) inputRef.current?.focus();
   }, [loading]);
+
+  useEffect(() => {
+    if (showHistory) fetchHistory();
+  }, [showHistory]);
+
+  async function fetchHistory() {
+    try {
+      const res = await fetch("/api/messages");
+      const data = await res.json();
+      setHistory(data);
+    } catch {
+      console.error("Erro ao buscar histórico");
+    }
+  }
 
   async function sendMessage(e: React.FormEvent) {
     e.preventDefault();
     if (!input.trim()) return;
 
-    const userMessage: Message = { from: "user", text: input.trim() };
-    const updatedMessages: Message[] = [...messages, userMessage];
+    const userMessage: ChatMessage = { from: "user", text: input.trim() };
+    const updatedMessages: ChatMessage[] = [...messages, userMessage];
     setMessages(updatedMessages);
     setInput("");
     setLoading(true);
 
     try {
-      const shortHistory: Message[] = updatedMessages.slice(-20);
-
+      const shortHistory: ChatMessage[] = updatedMessages.slice(-20);
       const res = await fetch("/api/messages", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -76,13 +89,17 @@ export default function Home() {
           <span className="transform -rotate-6 animate-pulse-slow">🍕</span>
           <span>PizzAIria</span>
         </h1>
+        <button
+          className="absolute right-8 top-8 px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white text-sm rounded-full z-20"
+          onClick={() => setShowHistory(true)}
+        >
+          Ver histórico
+        </button>
         <p className="text-base mt-4 font-light">Peça sua pizza favorita!</p>
-        <div className="absolute top-0 left-0 w-24 h-24 rounded-full opacity-5 blur-xl -translate-x-12 -translate-y-12"></div>
-        <div className="absolute bottom-0 right-0 w-32 h-32 rounded-full opacity-5 blur-xl translate-x-16 translate-y-16"></div>
       </header>
 
       <main className="flex-1 flex items-center justify-center py-8 overflow-x-hidden">
-        <div className="w-[90%] max-w-3xl h-[75vh] rounded-3xl shadow-xl flex flex-col overflow-hidden border border-gray-200 transform transition-all duration-300 ease-in-out hover:shadow-2xl bg-black">
+        <div className="w-[90%] max-w-3xl h-[75vh] rounded-3xl shadow-xl flex flex-col overflow-hidden border border-gray-200 bg-black">
           <div className="flex-1 flex flex-col overflow-hidden">
             <div
               ref={chatRef}
@@ -96,7 +113,7 @@ export default function Home() {
                   }`}
                 >
                   <div
-                    className={`px-5 py-3 rounded-2xl text-base max-w-[75%] whitespace-pre-wrap shadow-sm font-normal leading-relaxed transition-all duration-200 ease-in-out transform hover:scale-[1.01] ${
+                    className={`px-5 py-3 rounded-2xl text-base max-w-[75%] whitespace-pre-wrap shadow-sm leading-relaxed transition-all transform hover:scale-[1.01] ${
                       msg.from === "user"
                         ? "bg-amber-200 text-amber-900 rounded-br-none"
                         : "bg-gradient-to-tr from-orange-500 to-red-500 text-white rounded-bl-none"
@@ -125,14 +142,14 @@ export default function Home() {
                   autoFocus
                   disabled={loading}
                   type="text"
-                  className="flex-1 px-5 py-3 rounded-full shadow-sm focus:outline-none focus:ring-3 focus:ring-orange-300 placeholder-gray-500 text-base text-black transition-all duration-200"
+                  className="flex-1 px-5 py-3 rounded-full text-black text-base placeholder-gray-500"
                   value={input}
                   placeholder="O que você gostaria de pedir?"
                   onChange={(e) => setInput(e.target.value)}
                 />
                 <button
                   type="submit"
-                  className="bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white px-7 py-3 rounded-full transition-all duration-200 ease-in-out font-semibold shadow-lg hover:shadow-xl disabled:opacity-60 disabled:cursor-not-allowed transform active:scale-95"
+                  className="bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white px-7 py-3 rounded-full font-semibold shadow-lg hover:shadow-xl disabled:opacity-60 disabled:cursor-not-allowed"
                   disabled={loading}
                 >
                   Enviar
@@ -142,6 +159,73 @@ export default function Home() {
           </div>
         </div>
       </main>
+
+      {showHistory && (
+        <div className="fixed inset-0 z-50 bg-black bg-opacity-60 flex justify-end">
+          <div className="w-full max-w-md bg-white text-black h-full p-6 overflow-y-auto">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-xl font-bold">Histórico de Conversas</h2>
+              <button
+                onClick={() => setShowHistory(false)}
+                className="text-red-600 font-semibold"
+              >
+                Fechar
+              </button>
+            </div>
+            {(() => {
+              const sessions: ChatMessage[][] = [];
+              let current: ChatMessage[] = [];
+
+              const sorted = [...history].sort(
+                (a, b) =>
+                  new Date(b.createdAt!).getTime() -
+                  new Date(a.createdAt!).getTime()
+              );
+
+              sorted.forEach((msg, i) => {
+                const prev = sorted[i - 1];
+                const diff =
+                  prev && msg.createdAt && prev.createdAt
+                    ? new Date(prev.createdAt).getTime() -
+                      new Date(msg.createdAt).getTime()
+                    : 0;
+
+                if (diff > 5 * 60 * 1000) {
+                  if (current.length) sessions.push(current);
+                  current = [];
+                }
+
+                current.push(msg);
+              });
+
+              if (current.length) sessions.push(current);
+
+              return (
+                <ul className="space-y-6">
+                  {sessions.map((session, idx) => (
+                    <li key={idx}>
+                      <h3 className="text-base font-semibold text-orange-600 mb-2">
+                        Conversa {sessions.length - idx}
+                      </h3>
+                      <ul className="space-y-2">
+                        {session.map((msg) => (
+                          <li key={msg.id} className="text-sm border-b pb-2">
+                            <strong>
+                              {msg.from === "user" ? "🧑 Cliente" : "🤖 Bot"}:
+                            </strong>{" "}
+                            {msg.text}
+                          </li>
+                        ))}
+                      </ul>
+                      <hr className="mt-4 border-gray-300" />
+                    </li>
+                  ))}
+                </ul>
+              );
+            })()}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -1,14 +1,11 @@
-// src/pages/api/cep.ts
-import type { NextApiRequest, NextApiResponse } from "next";
+import { NextRequest, NextResponse } from "next/server";
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  const { cep } = req.query;
+export async function GET(req: NextRequest) {
+  const { searchParams } = new URL(req.url);
+  const cep = searchParams.get("cep");
 
   if (!cep || typeof cep !== "string") {
-    return res.status(400).json({ error: "CEP inválido" });
+    return NextResponse.json({ error: "CEP inválido" }, { status: 400 });
   }
 
   try {
@@ -18,11 +15,14 @@ export default async function handler(
     const data = await response.json();
 
     if (data.erro) {
-      return res.status(404).json({ error: "CEP não encontrado" });
+      return NextResponse.json(
+        { error: "CEP não encontrado" },
+        { status: 404 }
+      );
     }
 
-    res.status(200).json({ rua: data.logradouro });
+    return NextResponse.json({ rua: data.logradouro });
   } catch {
-    res.status(500).json({ error: "Erro ao buscar CEP" });
+    return NextResponse.json({ error: "Erro ao buscar CEP" }, { status: 500 });
   }
 }
