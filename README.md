@@ -31,7 +31,6 @@ PizzAIria é um aplicativo de chat inteligente que simula um atendente virtual p
 - 🧠 [OpenAI API](https://platform.openai.com/)
 - 🌎 [ViaCEP](https://viacep.com.br/)
 - 🧬 [Prisma ORM](https://prisma.io/) (opcional)
-- 🧪 [Jest](https://jestjs.io/) + [ts-jest](https://kulshekhar.github.io/ts-jest/) para testes unitários
 
 ---
 
@@ -57,25 +56,6 @@ OPENAI_API_KEY=sua_chave_openai_aqui
 
 # Opcional: URL do banco de dados (Prisma)
 DATABASE_URL=postgres://usuario:senha@host:porta/banco
-```
-
----
-
-## 🧪 Executando os Testes
-
-Usamos **Jest** para testes unitários:
-
-```bash
-# Rodar todos os testes
-npm test
-```
-
-Estrutura de testes:
-
-```
-test/
-├── cep.service.test.ts
-└── message.service.test.ts
 ```
 
 ---
